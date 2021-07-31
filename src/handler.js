@@ -1,9 +1,11 @@
 // @flow
 
-import {ApiGatewayManagementApi} from 'aws-sdk';
 import type {Response} from './respponse/response';
 import {createDynamoDBClient} from "./dynamo-db/client";
 import {SLSChatConnections} from "./dynamo-db/sls-chat-cpnnections";
+import type {Event} from './lambda/event';
+import {createAPIGatewayManagement} from "./api-gateway/management";
+import {apiGatewayEndpoint} from "./api-gateway/api-gateway-endpoint";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const SLS_CHAT_CONNECTIONS = process.env.SLS_CHAT_CONNECTIONS ?? '';
@@ -15,7 +17,7 @@ const dynamoClient = createDynamoDBClient(AWS_REGION);
  * @param event イベント
  * @return レスポンス
  */
-export async function connect(event: any): Promise<Response> {
+export async function connect(event: Event): Promise<Response> {
   try {
     const dao = new SLSChatConnections(dynamoClient, SLS_CHAT_CONNECTIONS);
     const connection = {connectionId: event.requestContext.connectionId}
@@ -33,7 +35,7 @@ export async function connect(event: any): Promise<Response> {
  * @param event イベント
  * @return レスポンス
  */
-export async function disconnect(event: any): Promise<Response> {
+export async function disconnect(event: Event): Promise<Response> {
   try {
     const dao = new SLSChatConnections(dynamoClient, SLS_CHAT_CONNECTIONS);
     const connectionId = event.requestContext.connectionId;
@@ -51,13 +53,11 @@ export async function disconnect(event: any): Promise<Response> {
  * @param event イベント
  * @return レスポンス
  */
-export async function sendMessage(event: any): Promise<Response> {
+export async function sendMessage(event: Event): Promise<Response> {
   try {
     const dao = new SLSChatConnections(dynamoClient, SLS_CHAT_CONNECTIONS);
-    const apiGateway = new ApiGatewayManagementApi({
-      apiVersion: '2018-11-29',
-      endpoint: event.requestContext.domainName + '/' + event.requestContext.stage
-    });
+    const endpoint = apiGatewayEndpoint(event);
+    const apiGateway = createAPIGatewayManagement(endpoint);
     const postData = JSON.parse(event.body).data;
     const connections = await dao.all();
     await Promise.all(connections.map(v => apiGateway.postToConnection({
