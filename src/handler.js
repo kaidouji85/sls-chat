@@ -55,14 +55,18 @@ export async function disconnect(event: Event): Promise<Response> {
  */
 export async function sendMessage(event: Event): Promise<Response> {
   try {
+    const data = JSON.parse(event.body)?.data;
+    if ((typeof data) !== 'string') {
+      return {statusCode: 400, body: 'invalid data'};
+    }
+
     const dao = new SLSChatConnections(dynamoClient, SLS_CHAT_CONNECTIONS);
     const endpoint = apiGatewayEndpoint(event);
     const apiGateway = createAPIGatewayManagement(endpoint);
-    const postData = JSON.parse(event.body).data;
     const connections = await dao.all();
     await Promise.all(connections.map(v => apiGateway.postToConnection({
       ConnectionId: v.connectionId,
-      Data: postData
+      Data: data
     }).promise()));
     return {statusCode: 200, body: 'message sent'};
   } catch(err) {
