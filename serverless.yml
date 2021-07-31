@@ -34,12 +34,12 @@ provider:
 
 functions:
   connect:
-    handler: src/connect.connect
+    handler: src/handler.connect
     events:
       - websocket:
           route: $connect
   disconnect:
-    handler: src/disconnect.disconnect
+    handler: src/handler.disconnect
     events:
       - websocket:
           route: $disconnect
