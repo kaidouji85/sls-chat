@@ -38,6 +38,11 @@ functions:
     events:
       - websocket:
           route: $connect
+  disconnect:
+    handler: src/disconnect.disconnect
+    events:
+      - websocket:
+          route: $disconnect
 
 resources:
   Resources:
