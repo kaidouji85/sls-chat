@@ -1,6 +1,9 @@
 service: sls-chat
 frameworkVersion: '2'
 
+custom:
+  slsChatConnections: sls_chat_connections
+
 plugins:
   - serverless-webpack
 
@@ -12,7 +15,22 @@ provider:
   websocketsApiName: sls-chat-ws-api
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
-    TABLE_NAME: sls-chat-connections
+    SLS_CHAT_CONNECTIONS: ${self:custom.slsChatConnections}
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - 'dynamodb:PutItem'
+        - 'dynamodb:GetItem'
+        - 'dynamodb:DeleteItem'
+        - 'dynamodb:Scan'
+      Resource:
+        - Fn::GetAtt: [SLSChatRoomConnectionsTable, Arn]
+    - Effect: Allow
+      Action:
+        - 'execute-api:ManageConnections'
+      Resource:
+        - 'arn:aws:execute-api:*:*:**/@connections/*'
 
 functions:
   connect:
@@ -23,10 +41,10 @@ functions:
 
 resources:
   Resources:
-    SimpleChatTable:
+    SLSChatRoomConnectionsTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
-        TableName: simple_chatconnections
+        TableName: ${self:custom.slsChatConnections}
         AttributeDefinitions:
           - AttributeName: connectionId
             AttributeType: S
