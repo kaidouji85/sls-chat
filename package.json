@@ -1,9 +1,14 @@
 {
-  "name": "aws-serverless",
+  "name": "sls-chat",
   "version": "0.4.4",
   "description": "Serverless webpack example using ecma script",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm-run-all type-check package",
+    "type-check": "flow",
+    "package": "sls package"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.958.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.8",
@@ -14,6 +19,8 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "flow-bin": "^0.156.0",
+    "npm-run-all": "^4.1.5",
+    "serverless": "^2.52.1",
     "serverless-webpack": "^5.5.1",
     "webpack": "^5.47.1"
   },

@@ -1,4 +1,4 @@
-service: aws-serverless
+service: sls-chat
 frameworkVersion: '2'
 
 plugins:
@@ -7,15 +7,32 @@ plugins:
 provider:
   name: aws
   runtime: nodejs12.x
-  lambdaHashingVersion: 20201221
   region: ap-northeast-1
+  lambdaHashingVersion: 20201221
+  websocketsApiName: sls-chat-ws-api
+  websocketsApiRouteSelectionExpression: $request.body.action
+  environment:
+    TABLE_NAME: sls-chat-connections
 
 functions:
-  first:
-    handler: first.hello
-  second:
-    handler: second.hello
+  connect:
+    handler: src/connect.connect
     events:
-      - httpApi:
-          method: get
-          path: /second
+      - websocket:
+          route: $connect
+
+resources:
+  Resources:
+    SimpleChatTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: simple_chatconnections
+        AttributeDefinitions:
+          - AttributeName: connectionId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: connectionId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
