@@ -43,4 +43,14 @@ export class SLSChatConnections {
     const Key = {connectionId};
     return this._client.delete({TableName: this._tableName, Key}).promise();
   }
+
+  /**
+   * sls_chat_connectionsの全項目を取得する
+   *
+   * @return 取得結果
+   */
+  async all(): Promise<SLSChatConnection[]> {
+    const resp = await this._client.scan({TableName: this._tableName, ProjectionExpression: 'connectionId'}).promise();
+    return resp.Items;
+  }
 }
