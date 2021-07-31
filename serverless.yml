@@ -9,7 +9,7 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   region: ap-northeast-1
   lambdaHashingVersion: 20201221
   websocketsApiName: sls-chat-ws-api
