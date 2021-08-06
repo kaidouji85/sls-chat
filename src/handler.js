@@ -1,11 +1,11 @@
 // @flow
 
-import type {Response} from './respponse/response';
+import type {HandlerResponse} from './lambda/handler-response';
 import {createDynamoDBClient} from "./dynamo-db/client";
 import {SLSChatConnections} from "./dynamo-db/sls-chat-cpnnections";
-import type {Event} from './lambda/event';
+import type {HandlerEvent} from './lambda/handler-event';
 import {createAPIGatewayManagement} from "./api-gateway/management";
-import {apiGatewayEndpoint} from "./api-gateway/api-gateway-endpoint";
+import {apiGatewayEndpoint} from "./api-gateway/endpoint";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const SLS_CHAT_CONNECTIONS = process.env.SLS_CHAT_CONNECTIONS ?? '';
@@ -17,7 +17,7 @@ const dynamoClient = createDynamoDBClient(AWS_REGION);
  * @param event イベント
  * @return レスポンス
  */
-export async function connect(event: Event): Promise<Response> {
+export async function connect(event: HandlerEvent): Promise<HandlerResponse> {
   try {
     const dao = new SLSChatConnections(dynamoClient, SLS_CHAT_CONNECTIONS);
     const connection = {connectionId: event.requestContext.connectionId}
@@ -35,7 +35,7 @@ export async function connect(event: Event): Promise<Response> {
  * @param event イベント
  * @return レスポンス
  */
-export async function disconnect(event: Event): Promise<Response> {
+export async function disconnect(event: HandlerEvent): Promise<HandlerResponse> {
   try {
     const dao = new SLSChatConnections(dynamoClient, SLS_CHAT_CONNECTIONS);
     const connectionId = event.requestContext.connectionId;
@@ -53,7 +53,7 @@ export async function disconnect(event: Event): Promise<Response> {
  * @param event イベント
  * @return レスポンス
  */
-export async function sendMessage(event: Event): Promise<Response> {
+export async function sendMessage(event: HandlerEvent): Promise<HandlerResponse> {
   try {
     const data = JSON.parse(event.body)?.data;
     if ((typeof data) !== 'string') {

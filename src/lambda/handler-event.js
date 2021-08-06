@@ -1,7 +1,7 @@
 // @flow
 
-/** AWS Lambda Event */
-export type Event = {
+/** AWS Lambda HandlerEvent */
+export type HandlerEvent = {
   /** リクエストボディ */
   body: string,
   /** リクエストコンテクスト */
