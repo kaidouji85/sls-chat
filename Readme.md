@@ -38,6 +38,6 @@ sls deploy
 
 ```shell
 npm install -g wscat
-wscat -c <Websocket URL>
+wscat -c https://<WebsocketAPIのURL>?token=<トークン>
 {"action":"sendmessage", "data":"hello world"}
 ```
