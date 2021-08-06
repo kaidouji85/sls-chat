@@ -1,6 +1,6 @@
 // @flow
 
-import type {HandlerEvent} from '../lambda/handler-event';
+import type {HandlerEvent} from "../lambda/event";
 
 /**
  * eventからAPIゲートウェイのエンドポイントを生成する

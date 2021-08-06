@@ -3,9 +3,9 @@
 import type {HandlerResponse} from './lambda/handler-response';
 import {createDynamoDBClient} from "./dynamo-db/client";
 import {SLSChatConnections} from "./dynamo-db/sls-chat-cpnnections";
-import type {HandlerEvent} from './lambda/handler-event';
 import {createAPIGatewayManagement} from "./api-gateway/management";
 import {apiGatewayEndpoint} from "./api-gateway/endpoint";
+import type {HandlerEvent} from "./lambda/event";
 
 const AWS_REGION = process.env.AWS_REGION ?? '';
 const SLS_CHAT_CONNECTIONS = process.env.SLS_CHAT_CONNECTIONS ?? '';
