@@ -55,7 +55,8 @@ export async function disconnect(event: HandlerEvent): Promise<HandlerResponse> 
  */
 export async function sendMessage(event: HandlerEvent): Promise<HandlerResponse> {
   try {
-    const data = JSON.parse(event.body)?.data;
+    const body = event?.body ?? '';
+    const data = JSON.parse(body)?.data;
     if ((typeof data) !== 'string') {
       return {statusCode: 400, body: 'invalid data'};
     }

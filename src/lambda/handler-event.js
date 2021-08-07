@@ -21,7 +21,7 @@ export type HandlerRequestContext = {
 /** ハンドラのイベント */
 export type HandlerEvent = {
   /** リクエストボディ */
-  body: string,
+  body?: string,
   /** リクエストコンテクスト */
   requestContext: HandlerRequestContext
 };
