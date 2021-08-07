@@ -2,8 +2,8 @@
 
 import type {AuthorizerResponse} from "./lambda/authorizer-response";
 import {successAuthorize} from "./lambda/authorizer-response";
-import type {AuthorizerEvent} from "./lambda/event";
 import {verifyAccessToken} from "./auth0/access-token";
+import type {AuthorizerEvent} from "./lambda/authorizer-event";
 
 /** auth0 JWKS URL */
 const AUTH0_JWKS_URL = process.env.AUTH0_JWKS_URL || '';

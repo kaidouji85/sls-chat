@@ -1,17 +1,20 @@
 // @flow
 
-/** リクエスト コンテクスト */
-export type RequestContext = {
-  connectionId: string,
-  domainName: string,
-  stage: string
-};
-
 /** クエリパラメータをセットしたオブジェクト */
 export type QueryStringParameters = {
   /** トークン */
   token: string
-}
+};
+
+/** オーサライザ リクエストコンテクスト */
+export type AuthorizerRequestContext = {
+  /** コネクションID */
+  connectionId: string,
+  /** ドメイン名 */
+  domainName: string,
+  /** ステージ名 */
+  stage: string
+};
 
 /** オーサライザのイベント */
 export type AuthorizerEvent = {
@@ -24,13 +27,5 @@ export type AuthorizerEvent = {
   /** リクエストパラメータ */
   queryStringParameters: QueryStringParameters,
   /** リクエスト コンテクスト */
-  requestContext: RequestContext,
-};
-
-/** ハンドラのイベント */
-export type HandlerEvent = {
-  /** リクエストボディ */
-  body: string,
-  /** リクエスト コンテクスト */
-  requestContext: RequestContext
+  requestContext: AuthorizerRequestContext,
 };
