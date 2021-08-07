@@ -25,6 +25,7 @@ https://www.serverless.com/framework/docs/providers/aws/guide/credentials/
 ```shell
 cd <本リポジトリをcloneした場所>
 npm ci
+cp .env.template .env
 ```
 
 ## デプロイ
@@ -38,6 +39,14 @@ sls deploy
 
 ```shell
 npm install -g wscat
-wscat -c https://<WebsocketAPIのURL>?token=<トークン>
+
+# 以下URLを参考にAPI GatewayのURLを取得する
+# https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-wscat.html 
+API_URL=<AWS APIGatewayのURL>
+
+# 以下URLを参考にauth0のアクセストークンを取得する
+# https://auth0.com/docs/tokens/access-tokens/get-access-tokens
+ACCESS_TOKEN=<auth0 access token>
+wscat -c "$API_URL?token=$ACCESS_TOKEN"
 {"action":"sendmessage", "data":"hello world"}
 ```

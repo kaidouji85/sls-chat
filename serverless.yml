@@ -1,5 +1,6 @@
 service: sls-chat
 frameworkVersion: '2'
+useDotenv: true
 
 custom:
   slsChatConnections: sls_chat_connections
