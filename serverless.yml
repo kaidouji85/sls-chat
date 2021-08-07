@@ -16,6 +16,8 @@ provider:
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
     SLS_CHAT_CONNECTIONS: ${self:custom.slsChatConnections}
+    AUTH0_JWKS_URL: ${env:AUTH0_JWKS_URL}
+    AUTH0_AUDIENCE: ${env:AUTH0_AUDIENCE}
 
   iamRoleStatements:
     - Effect: Allow
