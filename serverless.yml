@@ -1,5 +1,6 @@
 service: sls-chat
 frameworkVersion: '2'
+useDotenv: true
 
 custom:
   slsChatConnections: sls_chat_connections
@@ -16,6 +17,8 @@ provider:
   websocketsApiRouteSelectionExpression: $request.body.action
   environment:
     SLS_CHAT_CONNECTIONS: ${self:custom.slsChatConnections}
+    AUTH0_JWKS_URL: ${env:AUTH0_JWKS_URL}
+    AUTH0_AUDIENCE: ${env:AUTH0_AUDIENCE}
 
   iamRoleStatements:
     - Effect: Allow
@@ -33,16 +36,27 @@ provider:
         - 'arn:aws:execute-api:*:*:**/@connections/*'
 
 functions:
+  auth:
+    handler: src/authorizer.authorizer
   connect:
     handler: src/handler.connect
     events:
       - websocket:
           route: $connect
+          authorizer:
+            name: auth
+            identitySource:
+              - 'route.request.querystring.token'
   disconnect:
     handler: src/handler.disconnect
     events:
       - websocket:
           route: $disconnect
+  default:
+    handler: src/handler.sendMessage
+    events:
+      - websocket:
+        route: $default
   sendMessage:
     handler: src/handler.sendMessage
     events:

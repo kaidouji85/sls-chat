@@ -1,7 +1,7 @@
 // @flow
 
 /** ハンドラが返すデータ */
-export type Response = {
+export type HandlerResponse = {
   statusCode: number,
   body: string
 };

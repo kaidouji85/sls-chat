@@ -1,6 +1,6 @@
 // @flow
 
-import type {Event} from '../lambda/event';
+import type {HandlerEvent} from "../lambda/handler-event";
 
 /**
  * eventからAPIゲートウェイのエンドポイントを生成する
@@ -8,6 +8,6 @@ import type {Event} from '../lambda/event';
  * @param event イベント
  * @return APIゲートウェイのエンドポイント
  */
-export function apiGatewayEndpoint(event: Event): string {
+export function apiGatewayEndpoint(event: HandlerEvent): string {
   return `${event.requestContext.domainName}/${event.requestContext.stage}`;
 }
