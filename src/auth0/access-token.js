@@ -9,7 +9,7 @@ import {JwksClient} from 'jwks-rsa';
  * @param client jwksRsaクライアント
  * @return 公開鍵取得関数
  */
-const publicKeyGetter = (client: typeof JwksClient): Function => (header: {kid: string}, callback: Function): void => {
+const createKeyGetter = (client: typeof JwksClient): Function => (header: {kid: string}, callback: Function): void => {
   client.getSigningKey(header.kid)
     .then(key => {
       const signingKey = key.publicKey || key.rsaPublicKey;
@@ -42,7 +42,7 @@ export type Auth0AccessToken = {
  */
 export function verifyAccessToken(accessToken: string, jwksURL: string, audience: string): Promise<Auth0AccessToken> {
   const client = new JwksClient({jwksUri: jwksURL});
-  const keyGetter = publicKeyGetter(client);
+  const keyGetter = createKeyGetter(client);
   return new Promise((resolve, reject) => {
     const algorithms = 'RS256';
     jwt.verify(accessToken, keyGetter, {algorithms, audience}, (err, decodedToken) => {
